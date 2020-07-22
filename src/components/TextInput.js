@@ -16,9 +16,14 @@ class TextInput extends React.Component {
 
     render(){
         return (
+            
         <form onSubmit={ this.onSubmit }>
-            <input type="text" name="text" value={ this.state.text } onChange={ this.onChange } />
-            <input type="submit" name="submit" />
+            <textarea className="form-control mb-3" rows="5" name="text" value={ this.state.text } onChange={ this.onChange }></textarea>
+            <div className="form-group">
+                <label className="mr-3">Or select a file:</label>
+                <input type="file" name="subtitles_file"/>
+            </div>
+            <input className="btn btn-primary" type="submit" name="submit" />
         </form>
         );
     }
