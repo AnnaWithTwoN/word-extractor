@@ -10,15 +10,17 @@ class Analyzer extends React.Component {
     }
 
     process = (text) => {
+        /*let array = []
+        let pattern = /[a-zA-Z']+/g
+        do {
+            var match = pattern.exec(text)
+            console.log(match)
+        } while(match)*/
         let array = text
-                    .replace(/[^a-zA-Z' \n]+/g, '')
-                    .replace(/\s\s+/g, ' ')
-                    .replace(/^\s*/, '')
-                    .replace(/\s*$/, '')
-                    .toLowerCase()
-                    .split(/\s/)
-                    .filter((value, index, self) => { return self.indexOf(value) === index; })
-        
+            .replace(/<[a-zA-Z']+>/g, '')
+            .match(/[a-zA-Z']+/g)
+            .filter((value, index, self) => { return self.indexOf(value) === index; })
+        console.log(array)
         this.setState({ words: array })
         let unkn = array.filter(w => {
             return this.state.known_words.find(e => { return e === w }) === undefined
