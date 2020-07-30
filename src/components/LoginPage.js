@@ -1,9 +1,11 @@
 import React from 'react';
+import axios from 'axios';
 
 class LoginPage extends React.Component {
     state = {
         username: '',
-        password: ''
+        password: '',
+        sumbitError: ''
     }
 
     onChange = (e) => {
@@ -13,6 +15,22 @@ class LoginPage extends React.Component {
     login = (event) => {
         event.preventDefault()
         console.log("logging", this.state.username, " ", this.state.password)
+        // post(url, data, config)
+        axios.post('http://localhost:4000/users/login', {
+            username: this.state.username,
+            password: this.state.password
+        }, { withCredentials: true })
+        .then(res => {
+            console.log(res.data)
+            //this is only for time
+            localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
+            //this.history.pushState(null, 'register')
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(err.response.data.message)
+            this.setState({ sumbitError : err.response.data.message })
+        })
     }
 
     render(){
@@ -44,6 +62,9 @@ class LoginPage extends React.Component {
                     </div>
                     <button type="submit" className="btn btn-primary">Login</button>
                 </form>
+                <span style={{ color: 'red', display: this.state.sumbitError === '' ? 'none' : 'block'}}>
+                    { this.state.sumbitError }
+                </span>
             </div>
         );
     }

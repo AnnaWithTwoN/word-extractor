@@ -1,11 +1,13 @@
 import React from 'react';
+import axios from 'axios';
 
 class RegisterPage extends React.Component {
     state = {
         username: '',
         email: '',
         password: '',
-        pswMatch: true
+        pswMatch: true, 
+        sumbitError: ''
     }
 
     onChange = (e) => {
@@ -17,16 +19,29 @@ class RegisterPage extends React.Component {
         console.log(this.state.pswMatch)
     }
 
-    login = (event) => {
+    register = (event) => {
         event.preventDefault()
-        console.log("logging", this.state.username, " ", this.state.password)
+        console.log("registraing", this.state.username, " ", this.state.password)
+        // post(url, data, config)
+        axios.post('http://localhost:4000/users', {
+            username: this.state.username,
+            email: this.state.email,
+            password: this.state.password
+        }, { withCredentials: true })
+        .then(res => {
+            console.log("success")
+        })
+        .catch(err => {
+            console.log(JSON.stringify(err.response.data.message))
+            this.setState({ sumbitError : err.response.data.message })
+        })
     }
 
     render(){
         return (
             <div className='container'>
                 <h2 className="mt-4">Create an account</h2>
-                <form onSubmit={ this.login } className="mt-4">
+                <form onSubmit={ this.register } className="mt-4">
                     <div className="form-group">
                         <label>Username: *</label>
                         <input 
@@ -70,6 +85,9 @@ class RegisterPage extends React.Component {
                         <span style={{ color: 'red', display: this.state.pswMatch ? 'none' : 'block'}}>Passwords do not match</span>
                     </div>
                     <button type="submit" className="btn btn-primary">Register</button>
+                    <span style={{ color: 'red', display: this.state.sumbitError === '' ? 'none' : 'block'}}>
+                        { this.state.sumbitError }
+                    </span>
                 </form>
             </div>
         );

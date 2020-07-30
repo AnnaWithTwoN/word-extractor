@@ -94,11 +94,7 @@ class Analyzer extends React.Component {
     render() {
         return (
         <div>
-            <div className="header" style={{ backgroundColor: "#c4c4c4", padding: "20px", marginBottom: "10px"}}>
-                <div className="conainer-fluid">
-                    <h1> Hello from analyzer</h1>
-                </div>
-            </div>
+            <h2 className="mt-4 mb-4">Analyze your text</h2>
             <TextInput process={ this.process } />
             <WordsOutput 
                 words={ this.state.unknown_words } 
