@@ -5,8 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var config = require('./config.js')
 
-var mongo = `mongodb+srv://admin:${MONGODB_KEY}@cluster0.prttz.gcp.mongodb.net/word-finder?retryWrites=true&w=majority`;
+var mongo = `mongodb+srv://admin:${ config.MONGODB_KEY }@cluster0.prttz.gcp.mongodb.net/word-finder?retryWrites=true&w=majority`;
 mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.Promise = global.Promise;

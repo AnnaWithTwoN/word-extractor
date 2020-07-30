@@ -1,5 +1,6 @@
 var userModel = require('../models/userModel.js');
 var bcrypt = require('bcrypt');
+const { NotExtended } = require('http-errors');
 //var ObjectId = require('mongoose').Types.ObjectId; 
 
 /**
@@ -54,26 +55,42 @@ module.exports = {
      * userController.create()
      */
     create: function (req, res) {
-        console.log("user id being created");
-        var user = new userModel({
-			username : req.body.username,
-			password : req.body.password,
-			email : req.body.email
-        });
-        //console.log(user.password);
+        console.log("user is being created", req.body);
 
-        //user.password = bcrypt.hashSync(user.password, 10);
-        //console.log(user.password);
+        userModel.find({ username: req.body.username })
+            .then(u => {
+                console.log(u)
+                if(u.length !== 0){
+                    return res.status(409).json({
+                        message: `Username '${ req.body.username }' is already taken`,
+                        error: 'Error in create user'
+                    })
+                }
 
-        user.save()
-            .then(user => {
-                return res.status(201).json(user)
+                var user = new userModel({
+                    username : req.body.username,
+                    password : req.body.password,
+                    email : req.body.email
+                });
+                console.log(user);
+        
+                //user.password = bcrypt.hashSync(user.password, 10);
+                //console.log(user.password);
+        
+                user.save()
+                    .then(user => {
+                        return res.status(201).json(user)
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            message: 'Error when creating user',
+                            error: err
+                        });
+                    })
+
             })
             .catch(err => {
-                return res.status(500).json({
-                    message: 'Error when creating user',
-                    error: err
-                });
+                console.log(err)
             })
     },
 
@@ -126,6 +143,30 @@ module.exports = {
                     message: 'Error when deleting the user.',
                     error: err
                 });
+            })
+    },
+
+    login: function (req, res) {
+        userModel.findOne({ username: req.body.username })
+            .then(user => {
+                console.log(user)
+                if (!user) {
+                    return res.status(404).json({
+                        message: 'No such user'
+                    });
+                }
+
+                if(user.password === req.body.password){
+                    res.status(200).json(user)
+                } else {
+                    return res.status(403).json({
+                        message: 'Wrong password'
+                    });
+                }
+                
+            })
+            .catch(err => {
+                console.log(err)
             })
     }
 
