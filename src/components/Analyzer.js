@@ -1,6 +1,7 @@
 import React from 'react';
 import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
+import axios from 'axios';
 
 class Analyzer extends React.Component {
     state = {
@@ -14,19 +15,33 @@ class Analyzer extends React.Component {
         let pattern = /[a-zA-Z']+/g
         do {
             var match = pattern.exec(text)
-            console.log(match)
+            if(match){
+                var word = {
+                    heading: match[0],
+                    translation: ''
+                }
+            }
+            array.push(word)
         } while(match)*/
+
         let array = text
             .replace(/<[a-zA-Z']+>/g, '')
             .match(/[a-zA-Z']+/g)
             .filter((value, index, self) => { return self.indexOf(value) === index; })
-        console.log(array)
-        this.setState({ words: array })
-        let unkn = array.filter(w => {
-            return this.state.known_words.find(e => { return e === w }) === undefined
+        
+        //this.setState({ words })
+        let unique_array = array.filter(w => {
+            return this.state.known_words.find(e => { return e.toLowerCase() === w.toLowerCase() }) === undefined
         })
-        //console.log(unkn)
+        let unkn = []
+        unique_array.forEach(word => {
+            unkn.push({
+                heading: word,
+                translation: ''
+            })
+        })
         this.setState({ unknown_words: unkn })
+        console.log(unkn)
     }
     
     markKnown = (word) => {
@@ -46,6 +61,36 @@ class Analyzer extends React.Component {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w !== word })})
     }
 
+    translate = (word) => {
+        console.log('sending request for', word)
+        axios.get(`http://localhost:4000/dictionary/${word.toLowerCase()}`)
+        .then(responce => {
+            console.log(responce.data)
+            this.setState({ 
+                unknown_words: this.state.unknown_words.map(w => {
+                    if(w.heading === word){
+                        w.translation = responce.data.Translation
+                    }
+                    return w;
+                })
+            
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            this.setState({ 
+                unknown_words: this.state.unknown_words.map(w => {
+                    if(w.heading === word){
+                        w.translation = "Can't find this word in dictionary or other dictionary error occured"
+                    }
+                    return w;
+                })
+            
+            })
+        })
+        
+    }
+
     render() {
         return (
         <div>
@@ -57,6 +102,7 @@ class Analyzer extends React.Component {
             <TextInput process={ this.process } />
             <WordsOutput 
                 words={ this.state.unknown_words } 
+                translate={ this.translate }
                 markKnown={ this.markKnown }
                 delete={ this.delete }
             />

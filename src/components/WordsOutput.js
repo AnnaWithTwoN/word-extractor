@@ -7,6 +7,7 @@ class WordsOutput extends React.Component {
         return this.props.words.map((word) => (
             <WordCard 
                 word={ word } 
+                translate={ this.props.translate }
                 markKnown={ this.props.markKnown }
                 delete={ this.props.delete }
             />
