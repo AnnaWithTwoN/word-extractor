@@ -131,6 +131,75 @@ module.exports = {
             })
     },
 
+    addKnownWords: function (req, res) {
+        var id = req.params.id;
+        console.log("adding new words");
+        console.log(id)
+        userModel.findOne({_id: id})
+            .then(user => {
+                if (!user) {
+                    return res.status(404).json({
+                        message: 'No such user'
+                    });
+                }
+
+                user.known_words = [...user.known_words, ...req.body.checked_known_words];
+                
+                user.save()
+                    .then(user => {
+                        res.status(200).json(user);
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            message: 'Error when updating user.',
+                            error: err
+                        });
+                    })
+            })
+            .catch(err => {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            })
+    },
+
+    deleteKnownWords: function (req, res) {
+        var id = req.params.id;
+        console.log("deleting words");
+        userModel.findOne({_id: id})
+            .then(user => {
+                if (!user) {
+                    return res.status(404).json({
+                        message: 'No such user'
+                    });
+                }
+
+                //user.username = req.body.username ? req.body.username : user.username;
+                user.known_words = user.known_words.filter(word => {
+                    return req.body.checked_unknown_words.find(word) === undefined
+                })
+                console.log(user.known_words)
+                
+                user.save()
+                    .then(user => {
+                        res.status(200).json(user);
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            message: 'Error when updating user.',
+                            error: err
+                        });
+                    })
+            })
+            .catch(err => {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            })
+    },
+
     /**
      * userController.remove()
      */

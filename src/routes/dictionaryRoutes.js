@@ -5,7 +5,7 @@ var config = require('../../config.js')
 
 
 router.get('/:word', (req, res) => {
-    console.log("requesting abby longvo for ", (req.params.word))
+    console.log("requesting abby lingvo for ", (req.params.word))
     axios.get(`https://developers.lingvolive.com/api/v1/Minicard?text=${req.params.word}&srcLang=1033&dstLang=1049&isCaseSensitive=false`, {
     headers: {'Authorization': `Bearer ${ config.ABBY_LINGVO_TOKEN }`},
     })
