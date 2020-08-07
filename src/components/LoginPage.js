@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import  { UserContext } from '../contexts/UserContext.js'
 
 class LoginPage extends React.Component {
+    static contextType = UserContext
     state = {
         username: '',
         password: '',
@@ -23,8 +25,9 @@ class LoginPage extends React.Component {
         .then(res => {
             console.log(res.data)
             //this is only for time
-            localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
-            //this.history.pushState(null, 'register')
+            //localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
+            this.context.setUser(res.data)
+            this.props.history.push('/')
         })
         .catch(err => {
             console.log(err)
@@ -39,7 +42,7 @@ class LoginPage extends React.Component {
                 <h2 className="mt-4">Please login</h2>
                 <form onSubmit={ this.login } className="mt-4">
                     <div className="form-group">
-                        <label>Username:</label>
+                        <label>Username: *</label>
                         <input 
                             type="text" 
                             className="form-control" 
@@ -50,7 +53,7 @@ class LoginPage extends React.Component {
                             required />
                     </div>
                     <div className="form-group">
-                        <label>Password:</label>
+                        <label>Password: *</label>
                         <input 
                             type="password" 
                             className="form-control" 

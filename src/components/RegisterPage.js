@@ -29,7 +29,9 @@ class RegisterPage extends React.Component {
             password: this.state.password
         }, { withCredentials: true })
         .then(res => {
-            console.log("success")
+            console.log("success", res.data)
+            localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
+            this.props.history.push('/login')
         })
         .catch(err => {
             console.log(JSON.stringify(err.response.data.message))

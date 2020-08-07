@@ -2,6 +2,7 @@ import React from 'react';
 import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
 import axios from 'axios';
+import { Prompt } from 'react-router-dom';
 
 class Analyzer extends React.Component {
     state = {
@@ -35,10 +36,7 @@ class Analyzer extends React.Component {
         })
         let unkn = []
         unique_array.forEach(word => {
-            unkn.push({
-                heading: word,
-                translation: ''
-            })
+            unkn.push(word)
         })
         this.setState({ unknown_words: unkn })
         console.log(unkn)
@@ -61,7 +59,11 @@ class Analyzer extends React.Component {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w !== word })})
     }
 
-    translate = (word) => {
+    componentWillUnmount() {
+        console.log("componentWillUnmount analyzer");
+    }
+
+    /*translate = (word) => {
         console.log('sending request for', word)
         axios.get(`http://localhost:4000/dictionary/${word.toLowerCase()}`)
         .then(responce => {
@@ -89,16 +91,31 @@ class Analyzer extends React.Component {
             })
         })
         
+    }*/
+
+    onLeave() {
+        console.log("trying to save user's new words")
+        /*axios.post(`http://localhost:4000/users/addknown/${}`, {
+            checked_known_words: "smt"
+        }, { withCredentials: true })
+        .then(() => {
+        })
+        .catch((err) => {
+            console.log("we are dammed")
+        })*/
+        return true
     }
 
     render() {
+        console.log("rendering analyzer for new");
         return (
         <div>
+            <Prompt message={ this.onLeave } />
             <h2 className="mt-4 mb-4">Analyze your text</h2>
             <TextInput process={ this.process } />
             <WordsOutput 
                 words={ this.state.unknown_words } 
-                translate={ this.translate }
+                //translate={ this.translate }
                 markKnown={ this.markKnown }
                 delete={ this.delete }
             />
