@@ -11,7 +11,7 @@ class App extends React.Component {
   static contextType = UserContext
 
   state = {
-    loggedIn: this.context.user.username !== undefined
+    //loggedIn: this.context.user.username !== undefined
   }
 
   enter = () => {

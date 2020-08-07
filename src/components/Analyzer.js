@@ -3,15 +3,22 @@ import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
 import axios from 'axios';
 import { Prompt } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext.js';
 
 class Analyzer extends React.Component {
+    static contextType = UserContext
     state = {
         words: [],
-        known_words: localStorage.getItem('known_words') === null ? [] : JSON.parse(localStorage.getItem('known_words')),
+        known_words: this.context.user.username === undefined ? ["one"] : this.context.user.known_words,
+        new_known_words: [],
         unknown_words: []
     }
 
     process = (text) => {
+        if (this.state.new_known_words.length !== 0){
+            this.onLeave()
+            this.setState({ new_known_words : [] })
+        }
         /*let array = []
         let pattern = /[a-zA-Z']+/g
         do {
@@ -44,23 +51,20 @@ class Analyzer extends React.Component {
     
     markKnown = (word) => {
         console.log(word)
+        word = word.toLowerCase()
+
         //change state
         this.setState({ 
             known_words: [...this.state.known_words, word], 
-            unknown_words: this.state.unknown_words.filter(w => { return w !== word })
+            new_known_words: [...this.state.new_known_words, word],
+            unknown_words: this.state.unknown_words.filter(w => { return w.toLowerCase() !== word })
         })
-        //console.log(this.state.unknown_words)
 
-        //change backend
-        localStorage.setItem('known_words', JSON.stringify(this.state.known_words))
+        this.context.setUser({ known_words: [...this.context.user.known_words, word],  })
     }
 
     delete = (word) => {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w !== word })})
-    }
-
-    componentWillUnmount() {
-        console.log("componentWillUnmount analyzer");
     }
 
     /*translate = (word) => {
@@ -93,21 +97,32 @@ class Analyzer extends React.Component {
         
     }*/
 
-    onLeave() {
+    onLeave = () => {
         console.log("trying to save user's new words")
-        /*axios.post(`http://localhost:4000/users/addknown/${}`, {
-            checked_known_words: "smt"
-        }, { withCredentials: true })
-        .then(() => {
-        })
-        .catch((err) => {
-            console.log("we are dammed")
-        })*/
+        
+        if(this.context.user.username !== undefined){
+            //var rep = true;
+            //while(rep){
+                console.log(this.state.new_known_words)
+                axios.post(`http://localhost:4000/users/addknown/${this.context.user._id}`, {
+                    checked_known_words: this.state.new_known_words
+                }, { withCredentials: true })
+                .then((user) => {
+                    //this.context.setUser({ user })
+                })
+                .then(() => {
+                    //rep = false
+                })
+                .catch((err) => {
+                    console.log("we are dammed")
+                })
+            //}
+        }
         return true
     }
 
     render() {
-        console.log("rendering analyzer for new");
+        console.log("rendering analyzer for new", this.state.known_words);
         return (
         <div>
             <Prompt message={ this.onLeave } />
@@ -117,6 +132,7 @@ class Analyzer extends React.Component {
                 words={ this.state.unknown_words } 
                 //translate={ this.translate }
                 markKnown={ this.markKnown }
+                known={false}
                 delete={ this.delete }
             />
         </div>

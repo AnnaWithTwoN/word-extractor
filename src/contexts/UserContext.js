@@ -9,11 +9,11 @@ export class UserProvider extends React.Component {
     }
 
     setUser = (user) => {
-        this.setState((prevState) => ({ user: user }))
+        this.setState((prevState) => ({ user: {...prevState.user, ...user }}))
     }
 
     render(){
-        console.log('user provider renders')
+        console.log('user provider renders', this.state.user)
         return (
             <UserContext.Provider value={{ user: this.state.user, setUser: this.setUser }}>
                 {this.props.children}

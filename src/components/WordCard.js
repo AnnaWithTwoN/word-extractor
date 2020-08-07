@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import { UserContext } from '../contexts/UserContext';
 
 class WordCard extends React.Component {
+    static contextType = UserContext
     state = {
         translation: ''
     }
@@ -24,6 +26,10 @@ class WordCard extends React.Component {
         
     }
 
+    markUnknown = () => {
+
+    }
+
     render(){
         return (
             <div className="card bg-light mt-4 mb-4">
@@ -37,8 +43,10 @@ class WordCard extends React.Component {
                 <div className="card-footer">
                     <button className="btn btn-success btn-sm mr-2" onClick={ this.translate.bind(this, this.props.word) }>Show translation</button>
                     <a className="btn btn-success btn-sm mr-2" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.word}` }>Look up in Cambridge dictionary</a>
-                    { !this.props.known ? <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markKnown.bind(this, this.props.word) }>I know this word</button>
-                    : <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markUnknown.bind(this, this.props.word) }>I don't know this word</button> }
+                    { this.context.user.username !== undefined &&
+                        (!this.props.known ? 
+                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markKnown.bind(this, this.props.word) }>I know this word</button> :
+                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.markUnknown.bind(this, this.props.word) }>I don't know this word</button>)  }
                     <button className="btn btn-danger btn-sm mr-2" onClick={ this.props.delete.bind(this, this.props.word) }>Delete</button>
                 </div>
             </div>
