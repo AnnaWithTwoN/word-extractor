@@ -67,15 +67,14 @@ module.exports = {
                     })
                 }
 
+                const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+
                 var user = new userModel({
                     username : req.body.username,
-                    password : req.body.password,
+                    password : hashedPassword,
                     email : req.body.email
                 });
                 console.log(user);
-        
-                //user.password = bcrypt.hashSync(user.password, 10);
-                //console.log(user.password);
         
                 user.save()
                     .then(user => {
@@ -109,7 +108,7 @@ module.exports = {
                 }
 
                 user.username = req.body.username ? req.body.username : user.username;
-                user.password = req.body.password ? req.body.password : user.password;
+                user.password = req.body.password ? bcrypt.hashSync(req.body.password, 10) : user.password;
                 user.email = req.body.email ? req.body.email : user.email;
                 
                 user.save()
@@ -225,7 +224,7 @@ module.exports = {
                     });
                 }
 
-                if(user.password === req.body.password){
+                if(bcrypt.compareSync(req.body.password, user.password)){
                     res.status(200).json(user)
                 } else {
                     return res.status(403).json({
