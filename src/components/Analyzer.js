@@ -9,9 +9,11 @@ import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
 class Analyzer extends React.Component {
     static contextType = UserContext
     state = {
-        words: [],
+        // known_words: list<string>
         known_words: this.context.user.username === undefined ? [] : this.context.user.known_words,
+        // new_known_words: list<string>
         new_known_words: [],
+        // unknown_words: list<object>
         unknown_words: []
     }
 
@@ -41,19 +43,20 @@ class Analyzer extends React.Component {
             .match(/[a-zA-Z']+/g)
             .filter((value, index, self) => { return self.indexOf(value) === index; }) // remove dublicats
         
-        //this.setState({ words })
-        let unique_array = array.filter(w => {
+        /*let unique_array = array.filter(w => {
             return this.state.known_words.find(e => { return e.toLowerCase() === w.toLowerCase() }) === undefined
-        })
+        })*/
 
         let lemmatizer = new Lemmatizer();
         let unkn = []
-        unique_array.forEach(word => {
+        array.forEach(word => {
             let lemmas = lemmatizer.lemmas(word.toLowerCase())
             if(lemmas.length === 0) return
+            let infinitive = lemmas[0][0]
+            if (this.state.known_words.find(e => { return e === infinitive }) !== undefined) return
             let word_obj = {
                 original: word,
-                infinitive: lemmas[0][0],
+                infinitive: infinitive,
                 part_of_speech: lemmas[0][1]
             }
             unkn.push(word_obj)
@@ -64,20 +67,19 @@ class Analyzer extends React.Component {
     
     markKnown = (word) => {
         console.log(word)
-        word = word.toLowerCase()
 
         //change state
         this.setState({ 
             known_words: [...this.state.known_words, word], 
             new_known_words: [...this.state.new_known_words, word],
-            unknown_words: this.state.unknown_words.filter(w => { return w.toLowerCase() !== word })
+            unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })
         })
 
         this.context.setUser({ known_words: [...this.context.user.known_words, word],  })
     }
 
     delete = (word) => {
-        this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w !== word })})
+        this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })})
     }
 
     onLeave = () => {
