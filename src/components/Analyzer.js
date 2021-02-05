@@ -36,7 +36,8 @@ class Analyzer extends React.Component {
         // source: https://github.com/takafumir/javascript-lemmatizer
 
         let array = text
-            .replace(/<[a-zA-Z']+>/g, '')
+            //.replace(/<[a-zA-Z']+>/g, '')
+            .replace(/<[^<>]+>/g, '')
             .match(/[a-zA-Z']+/g)
             .filter((value, index, self) => { return self.indexOf(value) === index; }) // remove dublicats
         
