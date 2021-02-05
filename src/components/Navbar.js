@@ -20,10 +20,10 @@ export default class Navbar extends React.Component {
                         { this.context.user.username === undefined &&
                         <NavLink to='/register' className="nav-link" activeClassName="active">Register</NavLink> }
                     </li>
-                    <li className="nav-item">
+                    {/*<li className="nav-item">
                         { this.context.user.username !== undefined && 
                         <NavLink to='/profile' className="nav-link" activeClassName="active">My profile</NavLink> }
-                    </li>
+                    </li>*/}
                 </ul>
             </nav>
         );

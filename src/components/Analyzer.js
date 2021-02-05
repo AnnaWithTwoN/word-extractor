@@ -9,8 +9,6 @@ import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
 class Analyzer extends React.Component {
     static contextType = UserContext
     state = {
-        // known_words: list<string>
-        known_words: this.context.user.username === undefined ? [] : this.context.user.known_words,
         // new_known_words: list<string>
         new_known_words: [],
         // unknown_words: list<object>
@@ -18,6 +16,7 @@ class Analyzer extends React.Component {
     }
 
     process = (text) => {
+        if(text == '') return
         if (this.state.new_known_words.length !== 0){
             this.onLeave()
             this.setState({ new_known_words : [] })
@@ -53,7 +52,7 @@ class Analyzer extends React.Component {
             let lemmas = lemmatizer.lemmas(word.toLowerCase())
             if(lemmas.length === 0) return
             let infinitive = lemmas[0][0]
-            if (this.state.known_words.find(e => { return e === infinitive }) !== undefined) return
+            if (this.context.user.known_words.find(e => { return e === infinitive }) !== undefined) return
             let word_obj = {
                 original: word,
                 infinitive: infinitive,
@@ -70,7 +69,6 @@ class Analyzer extends React.Component {
 
         //change state
         this.setState({ 
-            known_words: [...this.state.known_words, word], 
             new_known_words: [...this.state.new_known_words, word],
             unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })
         })
@@ -107,7 +105,6 @@ class Analyzer extends React.Component {
     }
 
     render() {
-        console.log("rendering analyzer for new", this.state.known_words);
         return (
         <div>
             <Prompt message={ this.onLeave } />

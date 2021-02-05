@@ -23,11 +23,9 @@ class LoginPage extends React.Component {
             password: this.state.password
         }, { withCredentials: true })
         .then(res => {
-            console.log(res.data)
-            //this is only for time
-            //localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
             this.context.setUser(res.data)
             this.setState({ username: '', password: ''})
+            localStorage.setItem('userId', res.data._id)
             this.props.history.push('/')
         })
         .catch(err => {

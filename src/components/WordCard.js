@@ -25,10 +25,6 @@ class WordCard extends React.Component {
         })
     }
 
-    markUnknown = () => {
-
-    }
-
     render(){
         
         return (
