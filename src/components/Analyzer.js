@@ -4,12 +4,13 @@ import WordsOutput from './WordsOutput';
 import axios from 'axios';
 import { Prompt } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext.js';
+import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
 
 class Analyzer extends React.Component {
     static contextType = UserContext
     state = {
         words: [],
-        known_words: this.context.user.username === undefined ? ["one"] : this.context.user.known_words,
+        known_words: this.context.user.username === undefined ? [] : this.context.user.known_words,
         new_known_words: [],
         unknown_words: []
     }
@@ -32,10 +33,12 @@ class Analyzer extends React.Component {
             array.push(word)
         } while(match)*/
 
+        // source: https://github.com/takafumir/javascript-lemmatizer
+
         let array = text
             .replace(/<[a-zA-Z']+>/g, '')
             .match(/[a-zA-Z']+/g)
-            .filter((value, index, self) => { return self.indexOf(value) === index; })
+            .filter((value, index, self) => { return self.indexOf(value) === index; }) // remove dublicats
         
         //this.setState({ words })
         let unique_array = array.filter(w => {
@@ -66,36 +69,6 @@ class Analyzer extends React.Component {
     delete = (word) => {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w !== word })})
     }
-
-    /*translate = (word) => {
-        console.log('sending request for', word)
-        axios.get(`http://localhost:4000/dictionary/${word.toLowerCase()}`)
-        .then(responce => {
-            console.log(responce.data)
-            this.setState({ 
-                unknown_words: this.state.unknown_words.map(w => {
-                    if(w.heading === word){
-                        w.translation = responce.data.Translation
-                    }
-                    return w;
-                })
-            
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            this.setState({ 
-                unknown_words: this.state.unknown_words.map(w => {
-                    if(w.heading === word){
-                        w.translation = "Can't find this word in dictionary or other dictionary error occured"
-                    }
-                    return w;
-                })
-            
-            })
-        })
-        
-    }*/
 
     onLeave = () => {
         console.log("trying to save user's new words")

@@ -31,10 +31,11 @@ class WordCard extends React.Component {
     }
 
     render(){
+        
         return (
             <div className="card bg-light mt-4 mb-4">
                 <div className="card-header">
-                    <h3 className="card-title">{ this.props.word }</h3>
+                    <h3 className="card-title">{ this.props.word } ({ this.props.word_infinitive[0] }, { this.props.word_infinitive[1] })</h3>
                 </div>
                 <div className="card-body"
                     style={{ display: this.state.translation === '' ? "none" : "block"}}>
