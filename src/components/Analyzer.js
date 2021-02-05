@@ -44,9 +44,18 @@ class Analyzer extends React.Component {
         let unique_array = array.filter(w => {
             return this.state.known_words.find(e => { return e.toLowerCase() === w.toLowerCase() }) === undefined
         })
+
+        let lemmatizer = new Lemmatizer();
         let unkn = []
         unique_array.forEach(word => {
-            unkn.push(word)
+            let lemmas = lemmatizer.lemmas(word.toLowerCase())
+            if(lemmas.length === 0) return
+            let word_obj = {
+                original: word,
+                infinitive: lemmas[0][0],
+                part_of_speech: lemmas[0][1]
+            }
+            unkn.push(word_obj)
         })
         this.setState({ unknown_words: unkn })
         console.log(unkn)

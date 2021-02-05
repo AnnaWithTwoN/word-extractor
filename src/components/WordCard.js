@@ -23,7 +23,6 @@ class WordCard extends React.Component {
                 translation: "Can't find this word in dictionary or other dictionary error occured",
             })
         })
-        
     }
 
     markUnknown = () => {
@@ -35,19 +34,28 @@ class WordCard extends React.Component {
         return (
             <div className="card bg-light mt-4 mb-4">
                 <div className="card-header">
-                    <h3 className="card-title">{ this.props.word } ({ this.props.word_infinitive[0] }, { this.props.word_infinitive[1] })</h3>
+                    <span className="h3 card-title">
+                        { this.props.word.original } 
+                        <span className="h6 ml-2 text-muted">
+                            <small>inf. </small>
+                            { this.props.word.infinitive },
+                        </span>
+                        <span className="h6 ml-1 text-muted font-italic">
+                            { this.props.word.part_of_speech }
+                        </span>
+                    </span>
                 </div>
                 <div className="card-body"
                     style={{ display: this.state.translation === '' ? "none" : "block"}}>
                     <h5>{ this.state.translation }</h5>
                 </div>
                 <div className="card-footer">
-                    <button className="btn btn-success btn-sm mr-2" onClick={ this.translate.bind(this, this.props.word) }>Show translation</button>
-                    <a className="btn btn-success btn-sm mr-2" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.word}` }>Look up in Cambridge dictionary</a>
+                    <button className="btn btn-success btn-sm mr-2" onClick={ this.translate.bind(this, this.props.word.infinitive) }>Show translation</button>
+                    <a className="btn btn-success btn-sm mr-2" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.word.infinitive}` }>Look up in Cambridge dictionary</a>
                     { this.context.user.username !== undefined &&
                         (!this.props.known ? 
-                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markKnown.bind(this, this.props.word) }>I know this word</button> :
-                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.markUnknown.bind(this, this.props.word) }>I don't know this word</button>)  }
+                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markKnown.bind(this, this.props.word.infinitive) }>I know this word</button> :
+                        <button className="btn btn-warning btn-sm mr-2" onClick={ this.markUnknown.bind(this, this.props.word.infinitive) }>I don't know this word</button>)  }
                     <button className="btn btn-danger btn-sm mr-2" onClick={ this.props.delete.bind(this, this.props.word) }>Delete</button>
                 </div>
             </div>
