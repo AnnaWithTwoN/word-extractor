@@ -16,7 +16,7 @@ class TextInput extends React.Component {
         const reader = new FileReader();
 
         reader.addEventListener('load', (event) => {
-            console.log(event.target.result);
+            //console.log(event.target.result);
             this.setState({ text: event.target.result })
         });
         reader.readAsText(file);

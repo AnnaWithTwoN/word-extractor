@@ -24,6 +24,10 @@ export default class Navbar extends React.Component {
                         { this.context.user.username !== undefined && 
                         <NavLink to='/profile' className="nav-link" activeClassName="active">My profile</NavLink> }
                     </li>*/}
+                    <li className="nav-item">
+                        { this.context.user.username !== undefined &&
+                        <NavLink to='/logout' className="nav-link">Logout</NavLink>}
+                    </li>
                 </ul>
             </nav>
         );

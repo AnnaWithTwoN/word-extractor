@@ -2,7 +2,6 @@ import React from 'react';
 import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
 import axios from 'axios';
-import { Prompt } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext.js';
 import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
 
@@ -16,9 +15,9 @@ class Analyzer extends React.Component {
     }
 
     process = (text) => {
-        if(text == '') return
+        if(text === '') return
         if (this.state.new_known_words.length !== 0){
-            this.onLeave()
+            this.saveNewWords()
             this.setState({ new_known_words : [] })
         }
         /*let array = []
@@ -52,7 +51,8 @@ class Analyzer extends React.Component {
             let lemmas = lemmatizer.lemmas(word.toLowerCase())
             if(lemmas.length === 0) return
             let infinitive = lemmas[0][0]
-            if (this.context.user.known_words.find(e => { return e === infinitive }) !== undefined) return
+            if (this.context.user.username !== undefined &&
+                this.context.user.known_words.find(e => { return e === infinitive }) !== undefined) return
             let word_obj = {
                 original: word,
                 infinitive: infinitive,
@@ -61,7 +61,7 @@ class Analyzer extends React.Component {
             unkn.push(word_obj)
         })
         this.setState({ unknown_words: unkn })
-        console.log(unkn)
+        //console.log(unkn)
     }
     
     markKnown = (word) => {
@@ -73,14 +73,23 @@ class Analyzer extends React.Component {
             unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })
         })
 
-        this.context.setUser({ known_words: [...this.context.user.known_words, word],  })
+        this.context.updateUser({ known_words: [...this.context.user.known_words, word],  })
     }
 
     delete = (word) => {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })})
     }
 
-    onLeave = () => {
+    componentDidMount(){
+        window.addEventListener('beforeunload', this.saveNewWords);
+    }
+  
+    componentWillUnmount() {
+        this.saveNewWords();
+        window.removeEventListener('beforeunload', this.saveNewWords); // remove the event handler for normal unmounting
+    }
+
+    saveNewWords = () => {
         console.log("trying to save user's new words")
         
         if(this.context.user.username !== undefined){
@@ -107,7 +116,6 @@ class Analyzer extends React.Component {
     render() {
         return (
         <div>
-            <Prompt message={ this.onLeave } />
             <h2 className="mt-4 mb-4">Analyze your text</h2>
             <TextInput process={ this.process } />
             <WordsOutput 
