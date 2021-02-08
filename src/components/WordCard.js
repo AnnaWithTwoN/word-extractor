@@ -40,6 +40,17 @@ class WordCard extends React.Component {
                             { this.props.word.part_of_speech }
                         </span>
                     </span>
+                    <button 
+                        id="dropdownMenuButton"
+                        className="btn float-right" 
+                        data-toggle="dropdown" 
+                        aria-haspopup="true" 
+                        aria-expanded="false">
+                            <i className="fas fa-ellipsis-h" style={{color: "grey"}}></i>
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a className="dropdown-item" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.word.infinitive}` }>Look up in Cambridge dictionary</a>
+                    </div>
                 </div>
                 <div className="card-body"
                     style={{ display: this.state.translation === '' ? "none" : "block"}}>
@@ -47,7 +58,6 @@ class WordCard extends React.Component {
                 </div>
                 <div className="card-footer">
                     <button className="btn btn-success btn-sm mr-2" onClick={ this.translate.bind(this, this.props.word.infinitive) }>Show translation</button>
-                    <a className="btn btn-success btn-sm mr-2" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.word.infinitive}` }>Look up in Cambridge dictionary</a>
                     { this.context.user.username !== undefined &&
                         (!this.props.known ? 
                         <button className="btn btn-warning btn-sm mr-2" onClick={ this.props.markKnown.bind(this, this.props.word.infinitive) }>I know this word</button> :
