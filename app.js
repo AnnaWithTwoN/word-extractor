@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
-var config = require('./config.js')
+var config = require('./config.js');
+var session = require('express-session')
 
 var mongo = `mongodb+srv://admin:${ config.MONGODB_KEY }@cluster0.prttz.gcp.mongodb.net/word-finder?retryWrites=true&w=majority`;
 mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -45,6 +46,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+/*app.use(session({
+  secret: 'commited shark',
+  cookie: { httpOnly: false, maxAge: null }
+}))*/
 
 app.use('/users', usersRouter);
 app.use('/dictionary', dictionaryRouter)

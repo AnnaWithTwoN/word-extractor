@@ -3,6 +3,7 @@ var router = express.Router();
 const dictionaryController = require('../controllers/dictionaryController.js')
 
 
-router.get('/:word', dictionaryController.translate);
+router.get('/translation/:word', dictionaryController.translate);
+router.get('/definition/:word', dictionaryController.getDefinition);
 
 module.exports = router;
