@@ -76,7 +76,7 @@ class Analyzer extends React.Component {
         this.context.updateUser({ known_words: [...this.context.user.known_words, word],  })
     }
 
-    delete = (word) => {
+    hide = (word) => {
         this.setState({ unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })})
     }
 
@@ -123,7 +123,7 @@ class Analyzer extends React.Component {
                 //translate={ this.translate }
                 markKnown={ this.markKnown }
                 known={false}
-                delete={ this.delete }
+                hide={ this.hide }
             />
         </div>
         );

@@ -10,7 +10,7 @@ class WordsOutput extends React.Component {
                 key={ word.original } 
                 //translate={ this.props.translate }
                 markKnown={ this.props.markKnown }
-                delete={ this.props.delete }
+                hide={ this.props.hide }
                 known={ this.props.known }
             />
         ));
