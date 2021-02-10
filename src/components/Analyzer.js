@@ -3,15 +3,21 @@ import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext.js';
+import worker from '../utils/wordsExtractor.js';
+import WebWorker from '../utils/workerSetup.js';
 import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
+import Worker from "worker-loader!./Worker.js";
 
 class Analyzer extends React.Component {
     static contextType = UserContext
+
+    wordExtractorWorker = new Worker(worker)
     state = {
         // new_known_words: list<string>
         new_known_words: [],
         // unknown_words: list<object>
-        unknown_words: []
+        unknown_words: [],
+        progress: 0
     }
 
     process = (text) => {
@@ -20,48 +26,16 @@ class Analyzer extends React.Component {
             this.saveNewWords()
             this.setState({ new_known_words : [] })
         }
-        /*let array = []
-        let pattern = /[a-zA-Z']+/g
-        do {
-            var match = pattern.exec(text)
-            if(match){
-                var word = {
-                    heading: match[0],
-                    translation: ''
-                }
+
+        this.wordExtractorWorker.onmessage = (event) => {
+            if(event.data[0] == 'prog'){
+                this.setState({ progress: event.data[1] })
             }
-            array.push(word)
-        } while(match)*/
-
-        // source: https://github.com/takafumir/javascript-lemmatizer
-
-        let array = text
-            //.replace(/<[a-zA-Z']+>/g, '')
-            .replace(/<[^<>]+>/g, '')
-            .match(/[a-zA-Z']+/g)
-            .filter((value, index, self) => { return self.indexOf(value) === index; }) // remove dublicats
-        
-        /*let unique_array = array.filter(w => {
-            return this.state.known_words.find(e => { return e.toLowerCase() === w.toLowerCase() }) === undefined
-        })*/
-
-        let lemmatizer = new Lemmatizer();
-        let unkn = []
-        array.forEach(word => {
-            let lemmas = lemmatizer.lemmas(word.toLowerCase())
-            if(lemmas.length === 0) return
-            let infinitive = lemmas[0][0]
-            if (this.context.user.username !== undefined &&
-                this.context.user.known_words.find(e => { return e === infinitive }) !== undefined) return
-            let word_obj = {
-                original: word,
-                infinitive: infinitive,
-                part_of_speech: lemmas[0][1]
+            else if(event.data[0] == 'res'){
+                this.setState({ unknown_words: event.data[1], progress: 0})
             }
-            unkn.push(word_obj)
-        })
-        this.setState({ unknown_words: unkn })
-        //console.log(unkn)
+        }
+        this.wordExtractorWorker.postMessage([text, this.context.user.known_words])
     }
     
     markKnown = (word) => {
@@ -81,11 +55,12 @@ class Analyzer extends React.Component {
     }
 
     componentDidMount(){
-        window.addEventListener('beforeunload', this.saveNewWords);
+        window.addEventListener('beforeunload', this.saveNewWords)
     }
   
     componentWillUnmount() {
-        this.saveNewWords();
+        this.saveNewWords()
+        this.wordExtractorWorker.terminate()
         window.removeEventListener('beforeunload', this.saveNewWords); // remove the event handler for normal unmounting
     }
 
@@ -114,13 +89,15 @@ class Analyzer extends React.Component {
     }
 
     render() {
+        console.log('rerendering the whole analyzer')
         return (
         <div>
             <h2 className="mt-4 mb-4">Analyze your text</h2>
             <TextInput process={ this.process } />
+            { !!this.state.progress && <div className="spinner-border text-primary"></div> }
+            <div>{ this.state.progress + '%' }</div>
             <WordsOutput 
                 words={ this.state.unknown_words } 
-                //translate={ this.translate }
                 markKnown={ this.markKnown }
                 known={false}
                 hide={ this.hide }

@@ -38,7 +38,7 @@ class TextInput extends React.Component {
                     value={ this.state.file } onChange={ this.onFileChosen }
                     accept=".srt, .ssa, .ttml, .sbv, .dfxp, .vtt, .txt"/>
             </div>
-            <input className="btn btn-primary" type="submit" name="submit" />
+            <input className="btn btn-primary mb-2" type="submit" name="submit" />
         </form>
         );
     }
