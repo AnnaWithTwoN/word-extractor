@@ -3,15 +3,13 @@ import TextInput from './TextInput';
 import WordsOutput from './WordsOutput';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext.js';
-import worker from '../utils/wordsExtractor.js';
-import WebWorker from '../utils/workerSetup.js';
-import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
-import Worker from "worker-loader!./Worker.js";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import Worker from "worker-loader!../utils/wordsExtractor.js";
 
 class Analyzer extends React.Component {
     static contextType = UserContext
 
-    wordExtractorWorker = new Worker(worker)
+    wordExtractorWorker = new Worker()
     state = {
         // new_known_words: list<string>
         new_known_words: [],
@@ -94,8 +92,11 @@ class Analyzer extends React.Component {
         <div>
             <h2 className="mt-4 mb-4">Analyze your text</h2>
             <TextInput process={ this.process } />
-            { !!this.state.progress && <div className="spinner-border text-primary"></div> }
-            <div>{ this.state.progress + '%' }</div>
+            { !!this.state.progress && 
+                <div>
+                    <span className="spinner-border text-primary"></span>
+                    <span className="ml-2">{ this.state.progress + '%' }</span>
+                </div> }
             <WordsOutput 
                 words={ this.state.unknown_words } 
                 markKnown={ this.markKnown }
