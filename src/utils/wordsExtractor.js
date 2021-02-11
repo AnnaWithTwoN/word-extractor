@@ -3,7 +3,6 @@ import { Lemmatizer } from '../javascript-lemmatizer/js/lemmatizer.js';
 onmessage = (event) => {
     if (!event) return;
 
-    postMessage(['prog', 10])
     let text = event.data[0]
     let known_words = event.data[1]
 
@@ -13,14 +12,17 @@ onmessage = (event) => {
         .match(/[a-zA-Z']+/g)
         .filter((value, index, self) => { return self.indexOf(value) === index; }) // remove dublicats
 
-    postMessage(['prog', 50])
-    /*let unique_array = array.filter(w => {
-        return this.state.known_words.find(e => { return e.toLowerCase() === w.toLowerCase() }) === undefined
-    })*/
+    postMessage(['prog', 10])
+    let size = array.length
+    let currentProgress = 0.1
 
     let lemmatizer = new Lemmatizer();
     let unkn = []
-    array.forEach(word => {
+    array.forEach((word, index) => {
+        if(index/size >= currentProgress){
+            currentProgress += 0.25
+            postMessage(['prog', 10 + (index/size*90 | 0)])
+        }
         let lemmas = lemmatizer.lemmas(word.toLowerCase())
         //let lemmas = [word.toLowerCase(), 'noun']
         if(lemmas.length === 0) return

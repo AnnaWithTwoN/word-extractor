@@ -27,6 +27,7 @@ class Analyzer extends React.Component {
 
         this.wordExtractorWorker.onmessage = (event) => {
             if(event.data[0] == 'prog'){
+                console.log('progress:', event.data[1])
                 this.setState({ progress: event.data[1] })
             }
             else if(event.data[0] == 'res'){
@@ -87,7 +88,6 @@ class Analyzer extends React.Component {
     }
 
     render() {
-        console.log('rerendering the whole analyzer')
         return (
         <div>
             <h2 className="mt-4 mb-4">Analyze your text</h2>
