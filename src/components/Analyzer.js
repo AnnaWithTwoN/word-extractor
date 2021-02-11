@@ -3,6 +3,7 @@ import axios from 'axios'
 import { UserContext } from '../contexts/UserContext.js'
 import TextInput from './TextInput'
 import WordsOutput from './WordsOutput'
+import Instruction from  './Instruction.js'
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Worker from "worker-loader!../utils/wordsExtractor.js"
 
@@ -87,12 +88,22 @@ class Analyzer extends React.Component {
         return (
         <div>
             <h2 className="mt-4 mb-4">Analyze your text</h2>
+            <p>Upload file or paste text in the text field below
+                (it can be an article or a subtitles file, for example) and click "Send"<br/>
+                If you are new here, <a href="#instruction" data-toggle="collapse">see the instruction</a></p>
+
+            <div id="instruction" className="collapse">
+                <Instruction />
+            </div>
+
             <TextInput process={ this.process } />
             { !!this.state.progress && 
                 <div>
                     <span className="spinner-border text-primary"></span>
                     <span className="ml-2">{ this.state.progress + '%' }</span>
                 </div> }
+
+
             <WordsOutput 
                 words={ this.state.unknown_words } 
                 markKnown={ this.markKnown }

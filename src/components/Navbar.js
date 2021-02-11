@@ -9,13 +9,22 @@ export default class Navbar extends React.Component {
         return (
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
                 <ul className="navbar-nav">
+
                     <li className="nav-item">
                         <NavLink 
                             to='/' 
-                            className="nav-link" 
+                            className="navbar-brand" 
                             activeClassName="active" 
                             exact>Home</NavLink>
                     </li>
+
+                    <li className="nav-item">
+                        <NavLink 
+                            to='/about' 
+                            className="nav-link"
+                            activeClassName="active">About</NavLink>
+                    </li>
+
                     <li className="nav-item">
                         { this.context.user.username === undefined &&
                         <NavLink 
@@ -23,6 +32,7 @@ export default class Navbar extends React.Component {
                             className="nav-link" 
                             activeClassName="active">Login</NavLink> }
                     </li>
+
                     <li className="nav-item">
                         { this.context.user.username === undefined &&
                         <NavLink 
@@ -30,10 +40,12 @@ export default class Navbar extends React.Component {
                             className="nav-link" 
                             activeClassName="active">Register</NavLink> }
                     </li>
+
                     {/*<li className="nav-item">
                         { this.context.user.username !== undefined && 
                         <NavLink to='/profile' className="nav-link" activeClassName="active">My profile</NavLink> }
                     </li>*/}
+                    
                     <li className="nav-item">
                         { this.context.user.username !== undefined &&
                         <NavLink 

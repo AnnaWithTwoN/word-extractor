@@ -19,13 +19,13 @@ export class WordCardFooter extends React.Component {
                 <button 
                     className="btn btn-success btn-sm mr-2" 
                     onClick={ this.props.getDefinition.bind(this, this.props.infinitive) }>
-                        Definition
+                        Show definition
                 </button>
 
                 <button 
                     className="btn btn-success btn-sm mr-2" 
                     onClick={ this.props.translate.bind(this, this.props.infinitive) }>
-                        Translation
+                        Show translation
                 </button>
 
                 { this.context.user.username !== undefined &&

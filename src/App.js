@@ -2,6 +2,7 @@ import React from 'react';
 import Analyzer from './components/Analyzer'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
+import AboutPage from './components/AboutPage';
 import Logout from './components/Logout';
 import RegisterPage from './components/RegisterPage';
 import Navbar from './components/Navbar.js';
@@ -41,6 +42,7 @@ class App extends React.Component {
             <Logout history={ props.history } />
           )} />
           <Route path="/register" component={ RegisterPage } />
+          <Route path="/about" component={ AboutPage } />
         </UserProvider>
       </Router>
 
