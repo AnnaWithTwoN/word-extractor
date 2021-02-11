@@ -1,5 +1,5 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
 
 class RegisterPage extends React.Component {
     state = {
@@ -14,7 +14,7 @@ class RegisterPage extends React.Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    checkPwdMatch = (e) => {
+    checkPswMatch = (e) => {
         this.setState({ pswMatch : e.target.value === this.state.password })
         console.log(this.state.pswMatch)
     }
@@ -22,6 +22,7 @@ class RegisterPage extends React.Component {
     register = (event) => {
         event.preventDefault()
         console.log("registraing", this.state.username, " ", this.state.password)
+
         // post(url, data, config)
         axios.post('http://localhost:4000/users', {
             username: this.state.username,
@@ -30,12 +31,15 @@ class RegisterPage extends React.Component {
         }, { withCredentials: true })
         .then(res => {
             console.log("success", res.data)
-            localStorage.setItem('known_words', JSON.stringify(res.data.known_words))
             this.props.history.push('/login')
         })
-        .catch(err => {
-            console.log(JSON.stringify(err.response.data.message))
-            this.setState({ sumbitError : err.response.data.message })
+        .catch(error => {
+            this.setState({
+                sumbitError: 
+                    error.response ? 
+                    error.response.data.message :
+                    error.message
+            })
         })
     }
 
@@ -82,12 +86,19 @@ class RegisterPage extends React.Component {
                             type="password" 
                             className="form-control" 
                             placeholder="Repeat password" 
-                            onChange={ this.checkPwdMatch } 
+                            onChange={ this.checkPswMatch } 
                             required />
-                        <span style={{ color: 'red', display: this.state.pswMatch ? 'none' : 'block'}}>Passwords do not match</span>
+                        <span 
+                            style={{ 
+                                color: 'red', 
+                                display: this.state.pswMatch ? 'none' : 'block'}}>Passwords do not match</span>
                     </div>
                     <button type="submit" className="btn btn-primary">Register</button>
-                    <span style={{ color: 'red', display: this.state.sumbitError === '' ? 'none' : 'block'}}>
+                    <span  
+                        style={{ 
+                            color: 'red', 
+                            display: this.state.sumbitError === '' ? 'none' : 'block'}}
+                            className="mt-2">
                         { this.state.sumbitError }
                     </span>
                 </form>

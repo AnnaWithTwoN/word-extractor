@@ -11,18 +11,12 @@ import { UserProvider, UserContext } from './contexts/UserContext.js';
 class App extends React.Component {
   static contextType = UserContext
 
-  state = {
-    //loggedIn: this.context.user.username !== undefined
-  }
-
   enter = () => {
     console.log("entered the page")
-    this.setState({ onion: 1 })
   }
 
   leave = () => {
     console.log("leaving the page")
-    this.setState({ onion: 2 })
   }
 
   render(){

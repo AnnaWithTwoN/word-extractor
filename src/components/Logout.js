@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { UserContext } from '../contexts/UserContext.js'
 
 export default class Logout extends React.Component {

@@ -1,5 +1,5 @@
-import React from 'react';
-import WordCard from './WordCard'
+import React from 'react'
+import WordCard from './wordCard/WordCard.js'
 
 class WordsOutput extends React.Component {
 
@@ -8,7 +8,6 @@ class WordsOutput extends React.Component {
             <WordCard 
                 word={ word }
                 key={ word.original } 
-                //translate={ this.props.translate }
                 markKnown={ this.props.markKnown }
                 hide={ this.props.hide }
                 known={ this.props.known }

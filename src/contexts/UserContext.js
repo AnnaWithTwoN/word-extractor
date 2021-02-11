@@ -1,7 +1,7 @@
-import React, { createContext } from 'react';
-import axios from 'axios';
+import React, { createContext } from 'react'
+import axios from 'axios'
 
-export const UserContext = createContext();
+export const UserContext = createContext()
 
 export class UserProvider extends React.Component {
     state = {
@@ -20,8 +20,8 @@ export class UserProvider extends React.Component {
 
     componentDidMount = () => {
         // get user data here if user id is set in localStorage
-        //console.log('user provider renders', Cookies.get('connect.sid'))
         let userId = localStorage.getItem('userId')
+
         if(userId !== undefined){
             //console.log('will get user info')
             axios.get(`http://localhost:4000/users/${userId}`)
@@ -37,7 +37,11 @@ export class UserProvider extends React.Component {
 
     render(){
         return (
-            <UserContext.Provider value={{ user: this.state.user, setUser: this.setUser, updateUser: this.updateUser }}>
+            <UserContext.Provider 
+                value={{ 
+                    user: this.state.user, 
+                    setUser: this.setUser, 
+                    updateUser: this.updateUser }}>
                 {this.props.children}
             </UserContext.Provider>
         )

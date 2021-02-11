@@ -1,7 +1,7 @@
-import React from 'react';
-import { WordMeaning } from './WordMeaning.js';
-import { WordExtras } from './WordExtras.js';
-import { isEmpty } from '../utils/utils.js'
+import React from 'react'
+import { WordMeaning } from './WordMeaning.js'
+import { WordExtras } from './WordExtras.js'
+import { isEmpty } from '../../utils/utils.js'
 
 export class WordDefinition extends React.Component {
 
@@ -14,7 +14,11 @@ export class WordDefinition extends React.Component {
                 <div>
                     <h6>{ this.props.definition.error }</h6>
                     <h6>Try to
-                        <a className="ml-2" href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.definition.word}` } target="_blank">look up in Cambridge dictionary</a>
+                        <a 
+                            className="ml-2" 
+                            href={ `https://dictionary.cambridge.org/dictionary/english/${this.props.definition.word}` } 
+                            target="_blank"
+                            rel="noopener noreferrer">look up in Cambridge dictionary</a>
                     </h6>
                 </div>
             )
@@ -24,7 +28,10 @@ export class WordDefinition extends React.Component {
                     { Object.keys(this.props.definition.meanings).length === 0 ? 
                         <h6>No definitions found</h6> :
                         Object.values(this.props.definition.meanings).map((meaning, index) => (
-                            <WordMeaning key={ index } meaning={ meaning } index={ index }/>
+                            <WordMeaning 
+                                key={ index } 
+                                meaning={ meaning } 
+                                index={ index }/>
                         )) }
                     
                     <WordExtras 

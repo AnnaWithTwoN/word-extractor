@@ -1,10 +1,10 @@
-import React from 'react';
-import TextInput from './TextInput';
-import WordsOutput from './WordsOutput';
-import axios from 'axios';
-import { UserContext } from '../contexts/UserContext.js';
+import React from 'react'
+import axios from 'axios'
+import { UserContext } from '../contexts/UserContext.js'
+import TextInput from './TextInput'
+import WordsOutput from './WordsOutput'
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Worker from "worker-loader!../utils/wordsExtractor.js";
+import Worker from "worker-loader!../utils/wordsExtractor.js"
 
 class Analyzer extends React.Component {
     static contextType = UserContext
@@ -19,18 +19,20 @@ class Analyzer extends React.Component {
     }
 
     process = (text) => {
-        if(text === '') return
-        if (this.state.new_known_words.length !== 0){
+        if(text === '') 
+            return
+            
+        if(this.state.new_known_words.length !== 0){
             this.saveNewWords()
             this.setState({ new_known_words : [] })
         }
 
         this.wordExtractorWorker.onmessage = (event) => {
-            if(event.data[0] == 'prog'){
-                console.log('progress:', event.data[1])
+            if(event.data[0] === 'prog'){
+                //console.log('progress:', event.data[1])
                 this.setState({ progress: event.data[1] })
             }
-            else if(event.data[0] == 'res'){
+            else if(event.data[0] === 'res'){
                 this.setState({ unknown_words: event.data[1], progress: 0})
             }
         }
@@ -38,9 +40,6 @@ class Analyzer extends React.Component {
     }
     
     markKnown = (word) => {
-        console.log(word)
-
-        //change state
         this.setState({ 
             new_known_words: [...this.state.new_known_words, word],
             unknown_words: this.state.unknown_words.filter(w => { return w.infinitive !== word })
@@ -54,35 +53,32 @@ class Analyzer extends React.Component {
     }
 
     componentDidMount(){
+        // add the event handler to catch page leave or refresh 
+        // to save new words that were added to known
         window.addEventListener('beforeunload', this.saveNewWords)
     }
   
     componentWillUnmount() {
         this.saveNewWords()
         this.wordExtractorWorker.terminate()
-        window.removeEventListener('beforeunload', this.saveNewWords); // remove the event handler for normal unmounting
+
+        // remove the event handler for normal unmounting
+        window.removeEventListener('beforeunload', this.saveNewWords);
     }
 
     saveNewWords = () => {
-        console.log("trying to save user's new words")
-        
         if(this.context.user.username !== undefined){
-            //var rep = true;
-            //while(rep){
-                console.log(this.state.new_known_words)
-                axios.post(`http://localhost:4000/users/addknown/${this.context.user._id}`, {
-                    checked_known_words: this.state.new_known_words
-                }, { withCredentials: true })
-                .then((user) => {
-                    //this.context.setUser({ user })
-                })
-                .then(() => {
-                    //rep = false
-                })
-                .catch((err) => {
-                    console.log("we are dammed")
-                })
-            //}
+            console.log(this.state.new_known_words)
+            axios.post(`http://localhost:4000/users/addknown/${this.context.user._id}`, {
+                checked_known_words: this.state.new_known_words
+            }, { withCredentials: true })
+            .then((user) => {
+                //this.context.setUser({ user })
+            })
+            .catch((err) => {
+                // handle error - maybe try again or refuse to leave the page
+                console.log(err)
+            })
         }
         return true
     }

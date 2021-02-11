@@ -1,5 +1,5 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
 import  { UserContext } from '../contexts/UserContext.js'
 
 class LoginPage extends React.Component {
@@ -17,6 +17,7 @@ class LoginPage extends React.Component {
     login = (event) => {
         event.preventDefault()
         console.log("logging", this.state.username, " ", this.state.password)
+
         // post(url, data, config)
         axios.post('http://localhost:4000/users/login', {
             username: this.state.username,
@@ -28,10 +29,14 @@ class LoginPage extends React.Component {
             localStorage.setItem('userId', res.data._id)
             this.props.history.push('/')
         })
-        .catch(err => {
-            console.log(err)
-            console.log(err.response.data.message)
-            this.setState({ sumbitError : err.response.data.message })
+        .catch(error => {
+            console.log(error)
+            this.setState({
+                sumbitError: 
+                    error.response ? 
+                    error.response.data.message :
+                    error.message
+            })
         })
     }
 
@@ -64,7 +69,11 @@ class LoginPage extends React.Component {
                     </div>
                     <button type="submit" className="btn btn-primary">Login</button>
                 </form>
-                <span style={{ color: 'red', display: this.state.sumbitError === '' ? 'none' : 'block'}}>
+                <span 
+                    style={{ 
+                        color: 'red', 
+                        display: this.state.sumbitError === '' ? 'none' : 'block'}}
+                        className="mt-2">
                     { this.state.sumbitError }
                 </span>
             </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import WordsOutput from './WordsOutput';
+import React from 'react'
+import WordsOutput from './WordsOutput'
 import { UserContext } from '../contexts/UserContext.js'
 
 class Profile extends React.Component {
