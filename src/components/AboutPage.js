@@ -10,7 +10,7 @@ export default class AboutPage extends React.Component {
 
                 <h4 className="mt-4">What is this?</h4>
                 <p>This is the project made to give an opportunity for English learners 
-                    to improve their listening or reading skills through working 
+                    to improve their listening or reading skills by working 
                     through unknown words beforehand.</p>
 
                 <h4>Why?</h4>
