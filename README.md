@@ -17,25 +17,25 @@ The traditional approach of looking up a new word when seeing it for the first t
 
 
 ## What is done
-[x] Show infinitive of a word and part of speech\
-[x] Provide definition\
-[x] Provide translation to Russian\
-[x] Option to save a word to known for registered users\
-[x] Option to see a word in online Cambridge Dictionary\
+- [x] Show infinitive of a word and part of speech
+- [x] Provide definition
+- [x] Provide translation to Russian
+- [x] Option to save a word to known for registered users
+- [x] Option to see a word in online Cambridge Dictionary
 
 ## More to go
-[ ] Handle contractions and interjections properly\
-[ ] Add filtering words based on the chosen level of English knowledge\
-[ ] Add user profile\
-[ ] Option to add a word to learning set\
-[ ] Export the set of unknown words for using in word learning application\
-[ ] Deploy this project\
-[ ] Add support for offline usage\
+- [ ] Handle contractions and interjections properly
+- [ ] Add filtering words based on the chosen level of English knowledge
+- [ ] Add user profile
+- [ ] Option to add a word to learning set
+- [ ] Export the set of unknown words for using in word learning application
+- [ ] Deploy this project
+- [ ] Add support for offline usage
 
 
 ## Used solutions
 1. [English dictionary with words definitions](https://github.com/tusharlock10/Dictionary) by [tusharlock10](https://github.com/tusharlock10), started from [Stackoverflow issue](https://stackoverflow.com/questions/41768215/english-json-dictionary-with-word-word-type-and-definition)
-2. [JavaScript Lemmatizer](https://github.com/takafumir/javascript-lemmatizer) by [takafumir](https://github.com/takafumir)
+2. [JavaScript Lemmatizer](https://github.com/takafumir/javascript-lemmatizer) by [Takafumi Yamano](https://github.com/takafumir)
 3. [ABBYY Lingvo dictionaries API](https://developers.lingvolive.com/en-us/) for translating to the Russian language
 
 
