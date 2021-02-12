@@ -17,20 +17,20 @@ The traditional approach of looking up a new word when seeing it for the first t
 
 
 ## What is done
-[x] Show infinitive of a word and part of speech
-[x] Provide definition
-[x] Provide translation to Russian
-[x] Option to save a word to known for registered users
-[x] Option to see a word in online Cambridge Dictionary
+[x] Show infinitive of a word and part of speech\
+[x] Provide definition\
+[x] Provide translation to Russian\
+[x] Option to save a word to known for registered users\
+[x] Option to see a word in online Cambridge Dictionary\
 
 ## More to go
-[ ] Handle contractions and interjections properly
-[ ] Add filtering words based on the chosen level of English knowledge
-[ ] Add user profile
-[ ] Option to add a word to learning set
-[ ] Export the set of unknown words for using in word learning application
-[ ] Deploy this project
-[ ] Add support for offline usage
+[ ] Handle contractions and interjections properly\
+[ ] Add filtering words based on the chosen level of English knowledge\
+[ ] Add user profile\
+[ ] Option to add a word to learning set\
+[ ] Export the set of unknown words for using in word learning application\
+[ ] Deploy this project\
+[ ] Add support for offline usage\
 
 
 ## Used solutions
